@@ -374,6 +374,7 @@ Run this command in the Proxmox VE Shell:
 ```
 bash -c "$(wget -qLO - https://raw.githubusercontent.com/kjames2001/proxmoxHelper/main/ct/kodi-v1.sh)"
 ```
+I only changed unprivileged lxc to privileged lxc for better compatibility, every other setting was default.
 ### Setup audio
 
 To get audio output through the hdmi port, run the following commands in the lxc console:
