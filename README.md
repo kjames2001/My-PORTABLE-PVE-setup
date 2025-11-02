@@ -369,6 +369,6 @@ After all this, there are two ways to upgrade. We can type auc on the command li
 
 Note that under this setup, completing the sysupgrade will require three reboots (all will be done automatically), so give your device some time to finish what it's doing.
 
-## Setup a Kodi lxc for media play back using a single script
+## Setup a Kodi lxc for media play back with display output
 
 ``` bash -c "$(wget -qLO - https://raw.githubusercontent.com/kjames2001/proxmoxHelper/main/ct/kodi-v1.sh)" ```
