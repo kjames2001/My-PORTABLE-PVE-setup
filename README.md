@@ -370,5 +370,45 @@ After all this, there are two ways to upgrade. We can type auc on the command li
 Note that under this setup, completing the sysupgrade will require three reboots (all will be done automatically), so give your device some time to finish what it's doing.
 
 ## Setup a Kodi lxc for media play back with display output
+Run this command in the Proxmox VE Shell:
+```
+bash -c "$(wget -qLO - https://raw.githubusercontent.com/kjames2001/proxmoxHelper/main/ct/kodi-v1.sh)"
+```
+### Setup audio
 
-``` bash -c "$(wget -qLO - https://raw.githubusercontent.com/kjames2001/proxmoxHelper/main/ct/kodi-v1.sh)" ```
+To get audio output through the hdmi port, run the following commands in the lxc console:
+```
+aplay -l
+```
+
+this should give you an output like this:
+```
+**** List of PLAYBACK Hardware Devices ****
+card 1: Device [USB Audio Device], device 0: USB Audio [USB Audio]
+Subdevices: 1/1
+Subdevice #0: subdevice #0
+card 2: Generic_1 [HD-Audio Generic], device 3: HDMI 0 [LG TV]
+Subdevices: 1/1
+Subdevice #0: subdevice #0
+card 2: Generic_1 [HD-Audio Generic], device 7: HDMI 1 [HDMI 1]
+Subdevices: 1/1
+Subdevice #0: subdevice #0
+card 2: Generic_1 [HD-Audio Generic], device 8: HDMI 2 [HDMI 2]
+Subdevices: 1/1
+Subdevice #0: subdevice #0
+card 2: Generic_1 [HD-Audio Generic], device 9: HDMI 3 [HDMI 3]
+Subdevices: 1/1
+Subdevice #0: subdevice #0
+```
+test for audio output with this command:
+```
+aplay -c1 -D plughw:CARD=Generic_1,DEV=3 /usr/share/sounds/alsa/Front_Center.wav
+and/or
+aplay -D plughw:2,3 /usr/share/sounds/alsa/Front_Center.wav
+```
+then edit /etc/asound.conf accordingly:
+```
+defaults.pcm.card 2
+defaults.pcm.device 3
+defaults.ctl.card 1
+```
