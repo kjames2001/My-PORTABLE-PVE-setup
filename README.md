@@ -371,6 +371,7 @@ Note that under this setup, completing the sysupgrade will require three reboots
 
 ## Setup a Kodi lxc for media play back with display output
 For manual setup, follow this guide: https://blog.konpat.me/dev/2019/03/11/setting-up-lxc-for-intel-gpu-proxmox.html
+
 For automatic setup, run this command in the Proxmox VE Shell:
 ```
 bash -c "$(wget -qLO - https://raw.githubusercontent.com/kjames2001/proxmoxHelper/main/ct/kodi-v1.sh)"
