@@ -370,7 +370,8 @@ After all this, there are two ways to upgrade. We can type auc on the command li
 Note that under this setup, completing the sysupgrade will require three reboots (all will be done automatically), so give your device some time to finish what it's doing.
 
 ## Setup a Kodi lxc for media play back with display output
-Run this command in the Proxmox VE Shell:
+For manual setup, follow this guide: https://blog.konpat.me/dev/2019/03/11/setting-up-lxc-for-intel-gpu-proxmox.html
+For automatic setup, run this command in the Proxmox VE Shell:
 ```
 bash -c "$(wget -qLO - https://raw.githubusercontent.com/kjames2001/proxmoxHelper/main/ct/kodi-v1.sh)"
 ```
