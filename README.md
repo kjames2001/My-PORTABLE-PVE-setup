@@ -508,7 +508,7 @@ Enable and start the service:
 systemctl daemon-reload && systemctl enable checkip.service && systemctl start checkip.service
 ```
 
-Note: With this setup, if an ethernet cable is plugged into enp4s0 (the right port on Miroute M1pro), openwrt will still start and utilize that port for internet access. This is to be used in untrustworthy environments like hotels that provide a lan port into their network.
+Note: With this setup, if an ethernet cable is plugged into enp4s0, openwrt will still start and utilize that port for internet access. This is to be used in untrustworthy environments like hotels that provide a lan port into their network.
 
 ## Setup a Kodi lxc for media play back with display output
 I set this up because I wanted to make use of the display output of the iGPU, while simutaneously utilize its encoding/decoding part in another lxc.
