@@ -1,4 +1,4 @@
-# My PORTABLE PVE setup
+# My portable server setup
 A guide to setup a perfect travel nas/server on PVE with Access Point through OpenWRT on The Miroute M1Pro with m.2 wifi module MT7922 (MT7921 also works, could be even easier)
 
 Warning: This guide is/may appear convoluted/long to some people, and may contain mistakes as I get my sources from googling and AI. Some steps are not detailed as they are easily available on the internet or specific to individual softwares. Success is not guaranteed even if you have the exact same hardware as I do.
@@ -161,8 +161,10 @@ or simply a reboot.
 ## Remove proxmox nag
 
 To remove the “You do not have a valid subscription for this server” popup message while logging in, run the command bellow:
-
-    sed -Ezi.bak "s/(Ext.Msg.show\(\{\s+title: gettext\('No valid sub)/void\(\{ \/\/\1/g" /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js && systemctl restart pveproxy.service
+```
+sed -Ezi.bak "s/(Ext.Msg.show\(\{\s+title: gettext\('No valid sub)/void\(\{ \/\/\1/g" /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js && systemctl restart pveproxy.service
+```
+Add it to crontab if you like.
 
 ## Setting up Openwrt as a VM
 ### Creating the Openwrt VM
