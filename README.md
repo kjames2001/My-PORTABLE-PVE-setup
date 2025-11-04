@@ -588,6 +588,7 @@ For automatic setup, run this command in the Proxmox VE Shell:
 ```
 bash -c "$(wget -qLO - https://raw.githubusercontent.com/kjames2001/proxmoxHelper/main/ct/kodi-v1.sh)"
 ```
+Note this script is from this repo which I shamelessly forked: https://github.com/mrrudy/proxmoxHelper
 I only changed unprivileged lxc to privileged lxc for better compatibility, every other setting was default.
 
 Check your lxc conf file, it should look something like this:
