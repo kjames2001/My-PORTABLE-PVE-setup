@@ -347,100 +347,6 @@ After all this, there are two ways to upgrade. We can type auc on the command li
 
 Note that under this setup, completing the sysupgrade will require three reboots (all will be done automatically), so give your device some time to finish what it's doing.
 
-## Start openwrt at boot and renew dhcp lease if no IP is obtained (no ethernet cable plugged into enp3s0)
-
-To check for internet access @reboot, and renew dhcp lease from openwrt vm if no ethernet cable is plugged in:
-
-1. Script → /root/scripts/checkip.sh
-```
-#!/bin/bash
-
-# Log file
-LOGFILE="/var/log/checkip.log"
-
-# Redirect all output (stdout & stderr) to log file with timestamps
-exec > >(while read line; do echo "$(date '+%F %T') - $line"; done >> "$LOGFILE") 2>&1
-
-echo "=== Script started ==="
-
-# Function to check if IP is obtained
-check_ip() {
-    ip=$(ip addr show | grep inet | grep -vE "127\.0\.0\.1|fe80::|::1" | awk '{print $2}' | cut -d'/' -f1)
-    [ -n "$ip" ]  # returns 0 if not empty, 1 if empty
-}
-
-# Start timer
-start=$(date +%s)
-
-# Wait loop for 5 seconds to see if host already has IP
-while [ $(($(date +%s) - $start)) -lt 5 ]; do
-    if check_ip; then
-        echo "Host already has IP: $ip"
-        echo "=== Script finished ==="
-        exit 0
-    fi
-    sleep 1
-done
-
-echo "No IP detected, starting OpenWRT (VM 101) and AdGuard (LXC 102)..."
-
-# Start OpenWRT VM if not running
-if ! qm status 101 | grep -q "running"; then
-    echo "Starting OpenWRT VM 101..."
-    /usr/sbin/qm start 101 &
-else
-    echo "OpenWRT VM 101 already running."
-fi
-
-# Start AdGuard LXC if not running
-if ! pct status 102 | grep -q "running"; then
-    echo "Starting AdGuard LXC 102..."
-    /usr/sbin/pct start 102 &
-else
-    echo "AdGuard LXC 102 already running."
-fi
-
-sleep 20
-
-# Renew DHCP on Proxmox
-echo "Renewing DHCP lease on vmbr0..."
-/usr/sbin/dhclient -v -r vmbr0 2>/dev/null
-/usr/sbin/dhclient -v vmbr0
-
-echo "=== Script finished ==="
-```
-
-Make it executable:
-```
-chmod +x /root/script/checkip.sh
-```
-2. Systemd Service → /etc/systemd/system/checkip.service
-```
-[Unit]
-Description=Check IP and start OpenWRT + AdGuard if needed
-After=pve-cluster.service pvedaemon.service
-Requires=pve-cluster.service pvedaemon.service
-
-[Service]
-Type=oneshot
-ExecStart=/root/checkip.sh
-TimeoutStartSec=0
-
-[Install]
-WantedBy=multi-user.target
-```
-
-3. Enable & Start
-```
-systemctl daemon-reload
-systemctl enable checkip.service
-systemctl start checkip.service
-```
-Logs:
-```
-journalctl -t checkip -f
-```
-
 ## Setup a lxc for docker env and run your favorite docker/arrs
 
 This part is based on your requirement/preference, so its up to you to set it up. I set it up with the docker lxc proxmox helper script.
@@ -599,7 +505,7 @@ WantedBy=multi-user.target
 ```
 Enable and start the service:
 ```
-systemctl enable checkip.service && systemctl start checkip.service
+systemctl daemon-reload && systemctl enable checkip.service && systemctl start checkip.service
 ```
 
 Note: With this setup, if an ethernet cable is plugged into enp4s0, openwrt will still start and utilize that port for internet access. This is to be used in untrustworthy environments like hotels that provide a lan port into their network.
@@ -704,7 +610,11 @@ This script also adds permission to the user kodi to shutdown the lxc. This will
 ### Optional: Automate the start up and shutdown of the lxc
 
 I then went further to write a script that detects when a display is been plugged into the host machine, and start/stop the lxc when the display is plugged/unplugged.
-Store this script in /root/scripts/kodi.sh
+create script:
+```
+nano /root/scripts/kodi.sh
+```
+with these content:
 ```
 #!/bin/bash
 # Starts LXC when a display is connected, stops when none are connected
@@ -817,7 +727,7 @@ WantedBy=multi-user.target
 ```
 Enable and start the service:
 ```
-systemctl enable kodi.service && systemctl start kodi.service
+systemctl daemon-reload && systemctl enable kodi.service && systemctl start kodi.service
 ```
 This service/script runs every 5 secs to detect for plug/unplug of display and start/stop the lxc accordingly, but will do nothing if the lxc is started/stoped before/after the plugging event. 
 That means if I plug in the display after i manually started the lxc, it will do nothing. And if I manually shutdown the lxc after i plugged in the display, it will also do nothing.
