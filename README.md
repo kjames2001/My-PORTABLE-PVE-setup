@@ -61,6 +61,8 @@ Install Proxmox as per usual.
 Then follow the following guide.
 
 ## Proxmox dhcp setup:
+I found this guide online: https://weblog.lkiesow.de/20220223-proxmox-test-machine-self-servic/proxmox-server-dhcp.html and gave it some modification.
+
 To make a proxmox system truely portable, I would make use of dhcp for auto ip obtain. However, if you use the same subnet both on your home router and the to-be-installed openwrt vm, then you can skip this step.
 
 ### Network Configuration
