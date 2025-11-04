@@ -42,7 +42,7 @@ Size: 75.4cm x 75.4cm x 52.5cm = 0.3L*
 
 Power: DC 12v5a or 20v or PD 55w TYPE-C*
 
-Bios: supports WOL/PXE and start on power up
+Bios: supports WOL/PXE and start on power restore
 
 Any spec with a * at the end is part of the reason i choosed it as my portable nas/server solusion.
 
